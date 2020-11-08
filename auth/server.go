@@ -26,5 +26,5 @@ func NewAuthServer() (*AuthServer, error) {
 
 func (a AuthServer) testHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", jsonContentType)
-	json.NewEncoder(w).Encode("this is a test")
+	json.NewEncoder(w).Encode("this is a test from server insise auths")
 }
