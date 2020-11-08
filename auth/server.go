@@ -17,14 +17,14 @@ func NewAuthServer() (*AuthServer, error) {
 	a := new(AuthServer)
 
 	router := http.NewServeMux()
-	router.Handle("/test", http.HandlerFunc(a.testHandler))
+	router.Handle("/api/users/currentuser", http.HandlerFunc(a.currentUserHandler))
 
 	a.Handler = router
 
 	return a, nil
 }
 
-func (a AuthServer) testHandler(w http.ResponseWriter, r *http.Request) {
+func (a AuthServer) currentUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", jsonContentType)
-	json.NewEncoder(w).Encode("this is a test from server insise auths")
+	json.NewEncoder(w).Encode("this is a test from server ")
 }
