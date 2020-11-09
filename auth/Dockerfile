@@ -2,9 +2,10 @@ FROM golang:alpine
 
 WORKDIR /app
 COPY go.mod .
+COPY go.sum .
 RUN go mod download
 COPY . .
 
-RUN cd ./cmd/webserver/ && go build -o main . && cp main ../../ && cd ../../
+RUN go build -o main 
 
 CMD ["./main"]
