@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	auth "github.com/geborskimateusz/auth"
@@ -17,7 +18,8 @@ func TestSignoutRoute(t *testing.T) {
 	defer ts.Close()
 
 	// Make a request to our server with the {base url}/ping
-	resp, err := http.Get(fmt.Sprintf("%s"+auth.SignoutRoute, ts.URL))
+	r := strings.NewReader("any non validated body")
+	resp, err := http.Post(fmt.Sprintf("%s"+auth.SignoutRoute, ts.URL), "application/json", r)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)

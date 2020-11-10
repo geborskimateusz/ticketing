@@ -1,32 +1,43 @@
 package auth_test
 
-// func TestSignupRoute(t *testing.T) {
-// 	// The setupServer method, that we previously refactored
-// 	// is injected into a test server
-// 	ts := httptest.NewServer(auth.SetupServer())
-// 	// Shut down the server and block until all requests have gone through
-// 	defer ts.Close()
+import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
 
-// 	// Make a request to our server with the {base url}/ping
-// 	resp, err := http.Get(fmt.Sprintf("%s"+auth.SignupRoute, ts.URL))
+	auth "github.com/geborskimateusz/auth"
+)
 
-// 	if err != nil {
-// 		t.Fatalf("Expected no error, got %v", err)
-// 	}
+func TestSignupRoute(t *testing.T) {
+	// The setupServer method, that we previously refactored
+	// is injected into a test server
+	ts := httptest.NewServer(auth.SetupServer())
+	// Shut down the server and block until all requests have gone through
+	defer ts.Close()
 
-// 	if resp.StatusCode != 200 {
-// 		t.Fatalf("Expected status code 200, got %v", resp.StatusCode)
-// 	}
+	// Make a request to our server with the {base url}/ping
+	r := strings.NewReader("any non validated body")
+	resp, err := http.Post(fmt.Sprintf("%s"+auth.SignupRoute, ts.URL), "application/json", r)
 
-// 	val, ok := resp.Header["Content-Type"]
+	if err != nil {
+		t.Fatalf("Expected no error, got %v", err)
+	}
 
-// 	// Assert that the "content-type" header is actually set
-// 	if !ok {
-// 		t.Fatalf("Expected Content-Type header to be set")
-// 	}
+	if resp.StatusCode != 200 {
+		t.Fatalf("Expected status code 200, got %v", resp.StatusCode)
+	}
 
-// 	// Assert that it was set as expected
-// 	if val[0] != "application/json; charset=utf-8" {
-// 		t.Fatalf("Expected \"application/json; charset=utf-8\", got %s", val[0])
-// 	}
-// }
+	val, ok := resp.Header["Content-Type"]
+
+	// Assert that the "content-type" header is actually set
+	if !ok {
+		t.Fatalf("Expected Content-Type header to be set")
+	}
+
+	// Assert that it was set as expected
+	if val[0] != "application/json; charset=utf-8" {
+		t.Fatalf("Expected \"application/json; charset=utf-8\", got %s", val[0])
+	}
+}
