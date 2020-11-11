@@ -16,5 +16,5 @@ func Signup(c *gin.Context) {
 	}
 
 	fmt.Printf("%s", string(jsonData))
-	c.JSON(http.StatusOK, c)
+	c.JSON(http.StatusOK, gin.H{"data": jsonData})
 }

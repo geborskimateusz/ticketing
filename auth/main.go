@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/geborskimateusz/auth/controllers"
+	"github.com/geborskimateusz/auth/validation"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +28,7 @@ const (
 func SetupServer() *gin.Engine {
 	router := gin.Default()
 
-	router.POST(SignupRoute, controllers.Signup)
+	router.POST(SignupRoute, validation.SignupValidator(), controllers.Signup)
 	router.POST(SigninRoute, controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
 	router.GET(CurrentUserRoute, controllers.CurrentUser)
