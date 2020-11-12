@@ -6,18 +6,18 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	auth "github.com/geborskimateusz/auth"
+	"github.com/geborskimateusz/auth/server"
 )
 
 func TestCurrentuserRoute(t *testing.T) {
 	// The setupServer method, that we previously refactored
 	// is injected into a test server
-	ts := httptest.NewServer(auth.SetupServer())
+	ts := httptest.NewServer(server.SetupServer())
 	// Shut down the server and block until all requests have gone through
 	defer ts.Close()
 
 	// Make a request to our server with the {base url}/ping
-	resp, err := http.Get(fmt.Sprintf("%s"+auth.CurrentUserRoute, ts.URL))
+	resp, err := http.Get(fmt.Sprintf("%s"+server.CurrentUserRoute, ts.URL))
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)

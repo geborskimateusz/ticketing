@@ -3,7 +3,7 @@ package validation
 import (
 	"net/http"
 
-	"github.com/geborskimateusz/auth/entity"
+	"github.com/geborskimateusz/auth/server/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )

@@ -7,19 +7,19 @@ import (
 	"strings"
 	"testing"
 
-	auth "github.com/geborskimateusz/auth"
+	"github.com/geborskimateusz/auth/server"
 )
 
 func TestSigninRoute(t *testing.T) {
 	// The setupServer method, that we previously refactored
 	// is injected into a test server
-	ts := httptest.NewServer(auth.SetupServer())
+	ts := httptest.NewServer(server.SetupServer())
 	// Shut down the server and block until all requests have gone through
 	defer ts.Close()
 
 	// Make a request to our server with the {base url}/ping
 	r := strings.NewReader("any non validated body")
-	resp, err := http.Post(fmt.Sprintf("%s"+auth.SigninRoute, ts.URL), "application/json", r)
+	resp, err := http.Post(fmt.Sprintf("%s"+server.SigninRoute, ts.URL), "application/json", r)
 
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
