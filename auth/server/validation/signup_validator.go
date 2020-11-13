@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/server/entity"
@@ -16,7 +17,7 @@ func SignupValidator() gin.HandlerFunc {
 			validate := validator.New()
 			if err := validate.Struct(&user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{
-					"error": err.Error(),
+					"error": fmt.Sprint(err.Error()),
 				})
 				c.Abort()
 				return
