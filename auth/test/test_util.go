@@ -1,9 +1,16 @@
 package test
 
 import (
+	"encoding/json"
 	"net/http"
 	"testing"
 )
+
+// ValidationError is used to destructure message thrown
+// by validators under auth/server/validation
+type ValidationError struct {
+	Error string
+}
 
 // AssertStatusCode check code returned from request
 func AssertStatusCode(t *testing.T, got, want int) {
@@ -26,4 +33,19 @@ func AssertHeaderAndContentType(t *testing.T, resp *http.Response) {
 	if val[0] != "application/json; charset=utf-8" {
 		t.Fatalf("Expected \"application/json; charset=utf-8\", got %s", val[0])
 	}
+}
+
+func AssertValidationError(t *testing.T, got *http.Response, want string) {
+	var validationError ValidationError
+
+	err := json.NewDecoder(got.Body).Decode(&validationError)
+
+	if err != nil {
+		t.Errorf("Problem with parsing JSON response")
+	}
+
+	if validationError.Error != want {
+		t.Errorf("got %s want %s", validationError.Error, want)
+	}
+
 }
