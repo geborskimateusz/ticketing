@@ -47,5 +47,11 @@ func AssertValidationError(t *testing.T, got *http.Response, want string) {
 	if validationError.Error != want {
 		t.Errorf("got %s want %s", validationError.Error, want)
 	}
+}
 
+func AssertResponseBody(t *testing.T, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong, got %q want %q", got, want)
+	}
 }

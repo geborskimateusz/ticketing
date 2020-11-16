@@ -2,19 +2,20 @@ package controllers
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
+	"github.com/geborskimateusz/auth/server/entity"
 	"github.com/gin-gonic/gin"
 )
 
 func Signup(c *gin.Context) {
-	jsonData, err := ioutil.ReadAll(c.Request.Body)
+	var body entity.User
+	err := c.Bind(body)
 
 	if err != nil {
+		fmt.Println("afasa")
 		// retus error
 	}
 
-	fmt.Printf("%s", string(jsonData))
-	c.JSON(http.StatusOK, gin.H{"data": jsonData})
+	c.JSON(http.StatusOK, gin.H{"data": fmt.Sprintf("%v", body)})
 }
