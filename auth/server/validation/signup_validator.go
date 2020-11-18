@@ -6,6 +6,7 @@ import (
 
 	"github.com/geborskimateusz/auth/server/entity"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -13,7 +14,7 @@ import (
 func SignupValidator() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user entity.User
-		if err := c.ShouldBindJSON(&user); err == nil {
+		if err := c.ShouldBindBodyWith(&user, binding.JSON); err == nil {
 			validate := validator.New()
 			if err := validate.Struct(&user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{

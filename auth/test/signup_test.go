@@ -17,22 +17,45 @@ import (
 
 func TestSignup(t *testing.T) {
 
-	newUser := entity.User{
-		"test@test.com",
-		"1234asvvsd",
-	}
+	t.Run("should validate and return 200", func(t *testing.T) {
+		newUser := entity.User{
+			Email:    "test@test.com",
+			Password: "1234asvvsd",
+		}
 
-	userBytes, _ := json.Marshal(newUser)
+		userBytes, _ := json.Marshal(newUser)
 
-	w := httptest.NewRecorder()
-	c, r := gin.CreateTestContext(w)
-	r.POST(server.SignupRoute, controllers.Signup)
-	c.Request, _ = http.NewRequest("POST", server.SignupRoute, bytes.NewReader(userBytes))
-	r.ServeHTTP(w, c.Request)
+		w := httptest.NewRecorder()
+		c, r := gin.CreateTestContext(w)
+		r.POST(server.SignupRoute, controllers.Signup)
+		c.Request, _ = http.NewRequest("POST", server.SignupRoute, bytes.NewReader(userBytes))
+		r.ServeHTTP(w, c.Request)
 
-	if w.Code != http.StatusOK {
-		t.Errorf("Expected status %d, got %d", http.StatusOK, w.Code)
-	}
+		if w.Code != http.StatusOK {
+			t.Errorf("Expected status %d, got %d", http.StatusOK, w.Code)
+		}
 
-	AssertResponseBody(t, w.Body.String(), string(userBytes))
+		AssertResponseBody(t, w.Body.String(), string(userBytes))
+	})
+
+	t.Run("should fail on validation of any filed then return 400", func(t *testing.T) {
+		newUser := entity.User{
+			Email:    "testtest.com",
+			Password: "1234asvvsd",
+		}
+
+		userBytes, _ := json.Marshal(newUser)
+
+		w := httptest.NewRecorder()
+		c, r := gin.CreateTestContext(w)
+		r.POST(server.SignupRoute, controllers.Signup)
+		c.Request, _ = http.NewRequest("POST", server.SignupRoute, bytes.NewReader(userBytes))
+		r.ServeHTTP(w, c.Request)
+
+		if w.Code != http.StatusBadRequest {
+			t.Errorf("Expected status %d, got %d", http.StatusBadRequest, w.Code)
+		}
+
+		AssertResponseBody(t, w.Body.String(), string(userBytes))
+	})
 }

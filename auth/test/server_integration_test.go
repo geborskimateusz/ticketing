@@ -19,13 +19,11 @@ func TestSignupRoute(t *testing.T) {
 
 	t.Run("should return status 200", func(t *testing.T) {
 
-		requestBody, err := json.Marshal(map[string]string{
+		requestBody, _ := json.Marshal(map[string]string{
 			"email":    "test@gmail.com",
 			"password": "123dsfsdf",
 		})
-		if err != nil {
-			print(err)
-		}
+
 		resp, err := http.Post(fmt.Sprintf("%s"+server.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
 
 		if err != nil {
