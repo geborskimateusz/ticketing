@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/server/entity"
@@ -18,6 +19,7 @@ func Signup(c *gin.Context) {
 			gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println(body)
 
 	c.JSON(http.StatusOK, body)
 }
