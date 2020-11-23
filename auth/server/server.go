@@ -2,7 +2,8 @@ package server
 
 import (
 	"github.com/geborskimateusz/auth/server/controllers"
-	"github.com/geborskimateusz/auth/server/validation"
+	"github.com/geborskimateusz/auth/server/middlewares"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +24,9 @@ const (
 // SetupServer initilizes http server
 func SetupServer() *gin.Engine {
 	router := gin.Default()
+	router.Use(middlewares.ErrorHandler())
 
-	router.POST(SignupRoute, validation.SignupValidator(), controllers.Signup)
+	router.POST(SignupRoute /*validation.SignupValidator(),*/, controllers.Signup)
 	router.POST(SigninRoute, controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
 	router.GET(CurrentUserRoute, controllers.CurrentUser)
