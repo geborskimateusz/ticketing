@@ -1,24 +1,25 @@
 package controllers
 
 import (
-	"errors"
+	"net/http"
 
+	"github.com/geborskimateusz/auth/server/entity"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func Signup(c *gin.Context) {
 
-	// body := entity.User{}
+	body := entity.User{}
 
-	// if err := c.ShouldBindBodyWith(&body, binding.JSON); err != nil {
-	// 	c.AbortWithStatusJSON(
-	// 		http.StatusInternalServerError,
-	// 		gin.H{"error": err.Error()})
-	// 	return
-	// }
-	// fmt.Println(body)
+	if err := c.ShouldBindBodyWith(&body, binding.JSON); err != nil {
+		// c.Error(errors.New("Invalid email or password"))
+		c.AbortWithStatusJSON(
+			http.StatusInternalServerError,
+			gin.H{"error": err.Error()})
+		return
+	}
 
-	// c.JSON(http.StatusOK, body)
+	c.JSON(http.StatusOK, body)
 
-	c.Error(errors.New("Something went wrong during signup"))
 }
