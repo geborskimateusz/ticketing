@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,6 +28,16 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 
 		if len(errors) > 0 {
 			err := errors[0].Err
+
+			switch err.(type) {
+			case *errors.RequestValidationError:
+				fmt.Println("is request validation error")
+			case *errors.DatabaseConnectionError:
+				fmt.Println("is database connection error")
+			default:
+				fmt.Println("none of them")
+			}
+
 			parsedError := &customError{
 				Code:    http.StatusInternalServerError,
 				Message: err.Error(),
