@@ -1,9 +1,8 @@
-package errors
+package customerr
 
 import "fmt"
 
 type RequestValidationError struct {
-	// Err string
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }

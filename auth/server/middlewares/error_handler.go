@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/geborskimateusz/auth/server/customerr"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,9 +31,9 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 			err := errors[0].Err
 
 			switch err.(type) {
-			case *errors.RequestValidationError:
+			case *customerr.RequestValidationError:
 				fmt.Println("is request validation error")
-			case *errors.DatabaseConnectionError:
+			case *customerr.DatabaseConnectionError:
 				fmt.Println("is database connection error")
 			default:
 				fmt.Println("none of them")
