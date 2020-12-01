@@ -23,10 +23,11 @@ const (
 
 // SetupServer initilizes http server
 func SetupServer() *gin.Engine {
+
 	router := gin.Default()
 	router.Use(middlewares.ErrorHandler())
 
-	router.POST(SignupRoute /*validation.SignupValidator(),*/, controllers.Signup)
+	router.POST(SignupRoute, controllers.Signup)
 	router.POST(SigninRoute, controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
 	router.GET(CurrentUserRoute, controllers.CurrentUser)

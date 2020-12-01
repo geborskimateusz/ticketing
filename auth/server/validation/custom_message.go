@@ -1,30 +1,23 @@
 package validation
 
-import (
-	"fmt"
-	"strings"
+// type fieldError struct {
+// 	err validator.FieldError
+// }
 
-	"github.com/go-playground/validator/v10"
-)
+// func (q fieldError) String() string {
+// 	var sb strings.Builder
 
-type fieldError struct {
-	err validator.FieldError
-}
+// 	sb.WriteString("validation failed on field '" + q.err.Field() + "'")
+// 	sb.WriteString(", condition: " + q.err.ActualTag())
 
-func (q fieldError) String() string {
-	var sb strings.Builder
+// 	// Print condition parameters, e.g. oneof=red blue -> { red blue }
+// 	if q.err.Param() != "" {
+// 		sb.WriteString(" { " + q.err.Param() + " }")
+// 	}
 
-	sb.WriteString("validation failed on field '" + q.err.Field() + "'")
-	sb.WriteString(", condition: " + q.err.ActualTag())
+// 	if q.err.Value() != nil && q.err.Value() != "" {
+// 		sb.WriteString(fmt.Sprintf(", actual: %v", q.err.Value()))
+// 	}
 
-	// Print condition parameters, e.g. oneof=red blue -> { red blue }
-	if q.err.Param() != "" {
-		sb.WriteString(" { " + q.err.Param() + " }")
-	}
-
-	if q.err.Value() != nil && q.err.Value() != "" {
-		sb.WriteString(fmt.Sprintf(", actual: %v", q.err.Value()))
-	}
-
-	return sb.String()
-}
+// 	return sb.String()
+// }

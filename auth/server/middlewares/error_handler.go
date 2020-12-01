@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/server/customerr"
@@ -9,7 +8,6 @@ import (
 )
 
 type customError struct {
-	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -32,19 +30,18 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 
 			switch err.(type) {
 			case *customerr.RequestValidationError:
-				fmt.Println("is request validation error")
+				// var
+				// for _, fieldErr := range err.(validator.ValidationErrors) {
+				// 	c.Error(&customerr.RequestValidationError{Err: fieldErr})
+				// 	return
+				// }
+				c.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 			case *customerr.DatabaseConnectionError:
-				fmt.Println("is database connection error")
+				c.JSON(http.StatusInternalServerError, gin.H{"errors": err.Error()})
 			default:
-				fmt.Println("none of them")
+				c.JSON(http.StatusInternalServerError, gin.H{"errors": "Something went wrong."})
 			}
 
-			parsedError := &customError{
-				Code:    http.StatusInternalServerError,
-				Message: err.Error(),
-			}
-
-			c.JSON(parsedError.Code, parsedError)
 			c.Abort()
 			return
 		}

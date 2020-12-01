@@ -1,13 +1,32 @@
 package customerr
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/go-playground/validator/v10"
+)
 
 type RequestValidationError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Errors []validator.FieldError
 }
 
-func (e *RequestValidationError) Error() string {
-	// return fmt.Sprintf(e.Err)
-	return fmt.Sprintf(e.Message)
+func (validationError RequestValidationError) Error() string {
+	var sb strings.Builder
+
+	for _, ve := range validationError.Errors {
+		sb.WriteString("validation failed on field '" + ve.Field() + "'")
+		sb.WriteString(", condition: " + ve.ActualTag())
+
+		// Print condition parameters, e.g. oneof=red blue -> { red blue }
+		if ve.Param() != "" {
+			sb.WriteString(" { " + ve.Param() + " }")
+		}
+
+		if ve.Value() != nil && ve.Value() != "" {
+			sb.WriteString(fmt.Sprintf(", actual: %v", ve.Value()))
+		}
+	}
+
+	return sb.String()
 }
