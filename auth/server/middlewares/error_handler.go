@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/geborskimateusz/auth/server/customerr"
 	"github.com/gin-gonic/gin"
@@ -30,14 +31,10 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 
 			switch err.(type) {
 			case *customerr.RequestValidationError:
-				// var
-				// for _, fieldErr := range err.(validator.ValidationErrors) {
-				// 	c.Error(&customerr.RequestValidationError{Err: fieldErr})
-				// 	return
-				// }
-				c.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
+				validationErrors := strings.Split(err.Error(), "\n")
+				c.JSON(http.StatusBadRequest, gin.H{"errors": validationErrors})
 			case *customerr.DatabaseConnectionError:
-				c.JSON(http.StatusInternalServerError, gin.H{"errors": err.Error()})
+				c.JSON(http.StatusInternalServerError, gin.H{"errors": []string{err.Error()}})
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"errors": "Something went wrong."})
 			}
