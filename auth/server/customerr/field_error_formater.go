@@ -7,6 +7,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+const Separator = "\n"
+
 // FiledErrorsAsString composes custom error mesage from:
 // "Key: 'Name' Error:Field validation for 'Name' failed on the 'required' tag"
 // to
@@ -27,7 +29,7 @@ func FiledErrorsAsString(errors []validator.FieldError) string {
 			sb.WriteString(fmt.Sprintf(", actual: %v", ve.Value()))
 		}
 		if i < len(errors)-1 {
-			sb.WriteString("\n")
+			sb.WriteString(Separator)
 		}
 	}
 
