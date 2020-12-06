@@ -9,21 +9,22 @@ import (
 )
 
 type RequestValidationError struct {
-	statusCode int
-	reason     string
+	StatusCode int
+	Reason     string
 }
 
-func NewRequestValidationError(errors []validator.FieldError) DatabaseConnectionError {
-	dbConnError := DatabaseConnectionError{}
-	dbConnError.statusCode = http.StatusBadRequest
-	dbConnError.reason = FiledErrorsAsString(errors)
-	return dbConnError
+func NewRequestValidationError(errors []validator.FieldError) RequestValidationError {
+	reqValidationErr := RequestValidationError{
+		StatusCode: http.StatusBadRequest,
+		Reason:     FiledErrorsAsString(errors),
+	}
+	return reqValidationErr
 }
 
 func (e RequestValidationError) Error() string {
-	return fmt.Sprintf(e.reason)
+	return fmt.Sprintf(e.Reason)
 }
 
 func (e *RequestValidationError) SerializeErrors() []string {
-	return strings.Split(e.reason, Separator)
+	return strings.Split(e.Reason, Separator)
 }

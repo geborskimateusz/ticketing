@@ -6,21 +6,22 @@ import (
 )
 
 type DatabaseConnectionError struct {
-	statusCode int
-	reason     string
+	StatusCode int
+	Reason     string
 }
 
 func NewDataBaseConnectionError() DatabaseConnectionError {
-	dbConnError := DatabaseConnectionError{}
-	dbConnError.statusCode = http.StatusInternalServerError
-	dbConnError.reason = "Error connecting to database"
+	dbConnError := DatabaseConnectionError{
+		StatusCode: http.StatusInternalServerError,
+		Reason:     "Error connecting to database",
+	}
 	return dbConnError
 }
 
-func (e *DatabaseConnectionError) Error() string {
-	return fmt.Sprintf(e.reason)
+func (e DatabaseConnectionError) Error() string {
+	return fmt.Sprintf(e.Reason)
 }
 
 func (e *DatabaseConnectionError) SerializeErrors() []string {
-	return []string{e.reason}
+	return []string{e.Reason}
 }

@@ -1,19 +1,13 @@
 package middlewares
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/server/customerr"
 	"github.com/gin-gonic/gin"
 )
-
-type customError struct {
-	Message string `json:"message"`
-}
-
-func (err *customError) Error() string {
-	return err.Message
-}
 
 // ErrorHandler is a middleware error for global error handling
 func ErrorHandler() gin.HandlerFunc {
@@ -23,15 +17,20 @@ func ErrorHandler() gin.HandlerFunc {
 func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
-		errors := c.Errors.ByType(errType)
+		detectedErrors := c.Errors.ByType(errType)
 
-		if len(errors) > 0 {
-			err := errors[0].Err
-
-			switch err.(type) {
-			case *customerr.RequestValidationError:
-			case *customerr.DatabaseConnectionError:
-				c.JSON(err.StatusCode, gin.H{"errors": err.SerializeErrors()})
+		if len(detectedErrors) > 0 {
+			err := detectedErrors[0].Err
+			log.Printf("%T\n", err)
+			switch e := err.(type) {
+			case customerr.RequestValidationError:
+				fmt.Println("Request Validation Error")
+				fmt.Println(e.SerializeErrors())
+				c.JSON(e.StatusCode, gin.H{"errors": e.SerializeErrors()})
+			case customerr.DatabaseConnectionError:
+				fmt.Println("Database Connection Error")
+				fmt.Println(e.SerializeErrors())
+				c.JSON(e.StatusCode, gin.H{"errors": e.SerializeErrors()})
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"errors": "Something went wrong."})
 			}
@@ -39,5 +38,6 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
 	}
 }

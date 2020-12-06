@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/geborskimateusz/auth/server/customerr"
 	"github.com/geborskimateusz/auth/server/entity"
 	"github.com/gin-gonic/gin"
@@ -12,16 +10,14 @@ import (
 
 func Signup(c *gin.Context) {
 
-	fmt.Println("In controller")
 	var user entity.User
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err == nil {
 		validate := validator.New()
 		if err := validate.Struct(&user); err != nil {
 			validationErrors := err.(validator.ValidationErrors)
-			c.Error(&customerr.RequestValidationError{Errors: validationErrors})
+			c.Error(customerr.NewRequestValidationError(validationErrors))
 			return
 		}
 	}
-	c.Error(&customerr.DatabaseConnectionError{})
-	// c.JSON(http.StatusOK, user)
+	c.Error(customerr.NewDataBaseConnectionError())
 }
