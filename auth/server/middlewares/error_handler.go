@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -21,15 +20,12 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 
 		if len(detectedErrors) > 0 {
 			err := detectedErrors[0].Err
-			log.Printf("%T\n", err)
 			switch e := err.(type) {
 			case customerr.RequestValidationError:
-				fmt.Println("Request Validation Error")
-				fmt.Println(e.SerializeErrors())
+				log.Printf("%T -> %s", err, e.SerializeErrors())
 				c.JSON(e.StatusCode, gin.H{"errors": e.SerializeErrors()})
 			case customerr.DatabaseConnectionError:
-				fmt.Println("Database Connection Error")
-				fmt.Println(e.SerializeErrors())
+				log.Printf("%T -> %s", err, e.SerializeErrors())
 				c.JSON(e.StatusCode, gin.H{"errors": e.SerializeErrors()})
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{"errors": "Something went wrong."})
