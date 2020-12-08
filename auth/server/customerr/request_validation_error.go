@@ -28,3 +28,7 @@ func (e RequestValidationError) Error() string {
 func (e *RequestValidationError) SerializeErrors() []string {
 	return strings.Split(e.Reason, Separator)
 }
+
+func (e *RequestValidationError) GetStatusCode() int {
+	return e.StatusCode
+}

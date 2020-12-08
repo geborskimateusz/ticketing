@@ -25,3 +25,7 @@ func (e DatabaseConnectionError) Error() string {
 func (e *DatabaseConnectionError) SerializeErrors() []string {
 	return []string{e.Reason}
 }
+
+func (e *DatabaseConnectionError) GetStatusCode() int {
+	return e.StatusCode
+}
