@@ -24,54 +24,61 @@ type ApiError struct {
 	Reason     string
 }
 
+func (e ApiError) Error() string {
+	return fmt.Sprintf(e.Reason)
+}
+
+func (e *ApiError) SerializeErrors() []string {
+	return []string{e.Reason}
+}
+
+func (e *ApiError) GetStatusCode() int {
+	return e.StatusCode
+
+}
+
 type DatabaseConnectionError struct {
 	*ApiError
 }
 
-func NewDataBaseConnectionError() DatabaseConnectionError {
-	dbConnError := DatabaseConnectionError{
+func NewDataBaseConnectionError() ApiError {
+	dbConnError := &DatabaseConnectionError{
 		&ApiError{
 			StatusCode: http.StatusInternalServerError,
 			Reason:     "Error connecting to database",
 		},
 	}
-	return dbConnError
-}
-
-func (e DatabaseConnectionError) Error() string {
-	return fmt.Sprintf(e.Reason)
-}
-
-func (e *DatabaseConnectionError) SerializeErrors() []string {
-	return []string{e.Reason}
-}
-
-func (e *DatabaseConnectionError) GetStatusCode() int {
-	return e.StatusCode
+	return *dbConnError.ApiError
 }
 
 type RequestValidationError struct {
 	*ApiError
 }
 
-func NewRequestValidationError(errors []validator.FieldError) RequestValidationError {
-	reqValidationErr := RequestValidationError{
+func NewRequestValidationError(errors []validator.FieldError) ApiError {
+	reqValidationErr := &RequestValidationError{
 		&ApiError{
-			StatusCode: http.StatusInternalServerError,
+			StatusCode: http.StatusBadRequest,
 			Reason:     FiledErrorsAsString(errors),
 		},
 	}
-	return reqValidationErr
-}
-
-func (e RequestValidationError) Error() string {
-	return fmt.Sprintf(e.Reason)
+	return *reqValidationErr.ApiError
 }
 
 func (e *RequestValidationError) SerializeErrors() []string {
 	return strings.Split(e.Reason, Separator)
 }
 
-func (e *RequestValidationError) GetStatusCode() int {
-	return e.StatusCode
+type NotFoundError struct {
+	*ApiError
+}
+
+func NewNotFoundError() ApiError {
+	notFoundErr := &NotFoundError{
+		&ApiError{
+			StatusCode: http.StatusNotFound,
+			Reason:     "Not found",
+		},
+	}
+	return *notFoundErr.ApiError
 }

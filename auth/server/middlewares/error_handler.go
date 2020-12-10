@@ -21,10 +21,7 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 		if len(detectedErrors) > 0 {
 			err := detectedErrors[0].Err
 			switch e := err.(type) {
-			case customerr.RequestValidationError:
-				log.Printf("%T -> %s", err, e.SerializeErrors())
-				c.JSON(e.StatusCode, &customerr.SerializedError{Errors: e.SerializeErrors()})
-			case customerr.DatabaseConnectionError:
+			case customerr.ApiError:
 				log.Printf("%T -> %s", err, e.SerializeErrors())
 				c.JSON(e.StatusCode, &customerr.SerializedError{Errors: e.SerializeErrors()})
 			default:

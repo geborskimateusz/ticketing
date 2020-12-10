@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/geborskimateusz/auth/server/controllers"
+	"github.com/geborskimateusz/auth/server/customerr"
 	"github.com/geborskimateusz/auth/server/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,10 @@ func SetupServer() *gin.Engine {
 	router.POST(SigninRoute, controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
 	router.GET(CurrentUserRoute, controllers.CurrentUser)
+
+	router.NoRoute(func(c *gin.Context) {
+		c.Error(customerr.NewNotFoundError())
+	})
 
 	return router
 }
