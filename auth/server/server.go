@@ -22,8 +22,8 @@ const (
 	CurrentUserRoute string = "/api/users/currentuser"
 )
 
-// SetupServer initilizes http server
-func SetupServer() *gin.Engine {
+// Instance initilizes http server
+func Instance() *gin.Engine {
 
 	router := gin.Default()
 	router.Use(middlewares.ErrorHandler())
