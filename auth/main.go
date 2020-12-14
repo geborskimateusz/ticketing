@@ -49,6 +49,6 @@ func getConnection() (*mongo.Client, context.Context, context.CancelFunc) {
 }
 
 func main() {
-	// getConnection()
+	getConnection()
 	server.Instance().Run()
 }
