@@ -41,11 +41,11 @@ type DatabaseConnectionError struct {
 	*ApiError
 }
 
-func NewDataBaseConnectionError() ApiError {
+func NewDataBaseConnectionError(err error) ApiError {
 	dbConnError := &DatabaseConnectionError{
 		&ApiError{
 			StatusCode: http.StatusInternalServerError,
-			Reason:     "Error connecting to database",
+			Reason:     err.Error(),
 		},
 	}
 	return *dbConnError.ApiError

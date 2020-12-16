@@ -4,7 +4,7 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 // User datamodel
 type User struct {
-	ID       primitive.ObjectID
-	Username string `valid:"alphanum,required"`
-	Password string `valid:"alphanum,required"`
+	ID       primitive.ObjectID `bson:"_id"`
+	Username string             `bson:"username"`
+	Password string             `bson:"password"`
 }
