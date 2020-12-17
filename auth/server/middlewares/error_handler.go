@@ -25,7 +25,7 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 				log.Printf("%T -> %s", err, e.SerializeErrors())
 				c.JSON(e.StatusCode, &customerr.SerializedError{Errors: e.SerializeErrors()})
 			default:
-				c.JSON(http.StatusInternalServerError, &customerr.SerializedError{Errors: []string{"Something went wrong."}})
+				c.JSON(http.StatusInternalServerError, &customerr.SerializedError{Errors: []string{err.Error()}})
 			}
 
 			c.Abort()
