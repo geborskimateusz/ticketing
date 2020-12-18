@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/geborskimateusz/auth/server/controllers"
-	"github.com/geborskimateusz/auth/server/customerr"
 	"github.com/geborskimateusz/auth/server/middlewares"
+	"github.com/geborskimateusz/auth/server/validation"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,7 +34,7 @@ func Instance() *gin.Engine {
 	router.GET(CurrentUserRoute, controllers.CurrentUser)
 
 	router.NoRoute(func(c *gin.Context) {
-		c.Error(customerr.NewNotFoundError())
+		c.Error(validation.NewNotFoundError())
 	})
 
 	return router

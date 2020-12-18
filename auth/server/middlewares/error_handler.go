@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/geborskimateusz/auth/server/customerr"
+	"github.com/geborskimateusz/auth/server/validation"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,11 +21,11 @@ func errorHandlerT(errType gin.ErrorType) gin.HandlerFunc {
 		if len(detectedErrors) > 0 {
 			err := detectedErrors[0].Err
 			switch e := err.(type) {
-			case customerr.ApiError:
+			case validation.ApiError:
 				log.Printf("%T -> %s", err, e.SerializeErrors())
-				c.JSON(e.StatusCode, &customerr.SerializedError{Errors: e.SerializeErrors()})
+				c.JSON(e.StatusCode, &validation.SerializedError{Errors: e.SerializeErrors()})
 			default:
-				c.JSON(http.StatusInternalServerError, &customerr.SerializedError{Errors: []string{err.Error()}})
+				c.JSON(http.StatusInternalServerError, &validation.SerializedError{Errors: []string{err.Error()}})
 			}
 
 			c.Abort()
