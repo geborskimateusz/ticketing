@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"log"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/server/db"
@@ -15,7 +14,6 @@ import (
 )
 
 func Signup(c *gin.Context) {
-	log.Println("Hit endpoitnt: api/users/signup")
 
 	var user entity.User
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err == nil {
@@ -38,12 +36,12 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	saved, err := db.Create(user)
+	_, err = db.Create(user)
 	if err != nil {
 		c.Error(err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, saved)
+	c.JSON(http.StatusCreated, user)
 
 }

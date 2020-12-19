@@ -46,5 +46,7 @@ func Create(user entity.User) (*mongo.InsertOneResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	return collection.InsertOne(context.TODO(), user)
+
+	userDoc := entity.UserDoc{}
+	return collection.InsertOne(context.TODO(), userDoc.NewUserDoc(user))
 }
