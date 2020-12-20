@@ -4,15 +4,15 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/geborskimateusz/auth/server/db"
-	"github.com/geborskimateusz/auth/server/entity"
-	"github.com/geborskimateusz/auth/server/validation"
+	"github.com/geborskimateusz/auth/api/db"
+	"github.com/geborskimateusz/auth/api/entity"
+	"github.com/geborskimateusz/auth/api/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
+// Signup creates new user
 func Signup(c *gin.Context) {
 
 	var user entity.User
@@ -25,7 +25,7 @@ func Signup(c *gin.Context) {
 		}
 	}
 
-	usersFound, err := db.FindBy(bson.M{"email": user.Email})
+	usersFound, err := db.FindBy(db.Filter("email", user.Email))
 	if err != nil {
 		c.Error(err)
 		return

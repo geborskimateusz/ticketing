@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/geborskimateusz/auth/server/entity"
-	"github.com/geborskimateusz/auth/server/validation"
+	"github.com/geborskimateusz/auth/api/entity"
+	"github.com/geborskimateusz/auth/api/validation"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,6 +18,11 @@ func GetCollection() (*mongo.Collection, error) {
 		return nil, validation.NewDataBaseConnectionError(err)
 	}
 	return client.Database(DBNAME).Collection(USERS), nil
+}
+
+// Filter creates a map used in FindBy query
+func Filter(field, value string) primitive.M {
+	return bson.M{field: value}
 }
 
 // FindBy find User by given filter
@@ -47,6 +52,5 @@ func Create(user entity.User) (*mongo.InsertOneResult, error) {
 		return nil, err
 	}
 
-	userDoc := entity.UserDoc{}
-	return collection.InsertOne(context.TODO(), userDoc.NewUserDoc(user))
+	return collection.InsertOne(context.TODO(), entity.NewUserDoc(user))
 }

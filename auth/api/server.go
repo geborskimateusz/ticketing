@@ -1,9 +1,9 @@
-package server
+package api
 
 import (
-	"github.com/geborskimateusz/auth/server/controllers"
-	"github.com/geborskimateusz/auth/server/middlewares"
-	"github.com/geborskimateusz/auth/server/validation"
+	"github.com/geborskimateusz/auth/api/controllers"
+	"github.com/geborskimateusz/auth/api/middlewares"
+	"github.com/geborskimateusz/auth/api/validation"
 
 	"github.com/gin-gonic/gin"
 )

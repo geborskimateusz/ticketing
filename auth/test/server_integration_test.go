@@ -9,12 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/geborskimateusz/auth/server"
+	"github.com/geborskimateusz/auth/api"
 )
 
 func TestSignupRoute(t *testing.T) {
 
-	ts := httptest.NewServer(server.SetupServer())
+	ts := httptest.NewServer(api.Instance())
 	defer ts.Close()
 
 	t.Run("should return status 200", func(t *testing.T) {
@@ -24,7 +24,7 @@ func TestSignupRoute(t *testing.T) {
 			"password": "123dsfsdf",
 		})
 
-		resp, err := http.Post(fmt.Sprintf("%s"+server.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
+		resp, err := http.Post(fmt.Sprintf("%s"+api.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
 
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
@@ -43,7 +43,7 @@ func TestSignupRoute(t *testing.T) {
 		if err != nil {
 			print(err)
 		}
-		resp, err := http.Post(fmt.Sprintf("%s"+server.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
+		resp, err := http.Post(fmt.Sprintf("%s"+api.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
 
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
@@ -60,7 +60,7 @@ func TestSignupRoute(t *testing.T) {
 		if err != nil {
 			print(err)
 		}
-		resp, err = http.Post(fmt.Sprintf("%s"+server.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
+		resp, err = http.Post(fmt.Sprintf("%s"+api.SignupRoute, ts.URL), "application/json", bytes.NewBuffer(requestBody))
 
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
@@ -75,12 +75,12 @@ func TestSignupRoute(t *testing.T) {
 
 func TestSigninRoute(t *testing.T) {
 	t.Run("should return status 200", func(t *testing.T) {
-		ts := httptest.NewServer(server.SetupServer())
+		ts := httptest.NewServer(api.Instance())
 		defer ts.Close()
 
 		// Make a request to our server with the {base url}/ping
 		r := strings.NewReader("any non validated body")
-		resp, err := http.Post(fmt.Sprintf("%s"+server.SigninRoute, ts.URL), "application/json", r)
+		resp, err := http.Post(fmt.Sprintf("%s"+api.SigninRoute, ts.URL), "application/json", r)
 
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
@@ -93,12 +93,12 @@ func TestSigninRoute(t *testing.T) {
 
 func TestSignoutRoute(t *testing.T) {
 	t.Run("should return status 200", func(t *testing.T) {
-		ts := httptest.NewServer(server.SetupServer())
+		ts := httptest.NewServer(api.Instance())
 		defer ts.Close()
 
 		// Make a request to our server with the {base url}/ping
 		r := strings.NewReader("any non validated body")
-		resp, err := http.Post(fmt.Sprintf("%s"+server.SignoutRoute, ts.URL), "application/json", r)
+		resp, err := http.Post(fmt.Sprintf("%s"+api.SignoutRoute, ts.URL), "application/json", r)
 
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)
@@ -111,11 +111,11 @@ func TestSignoutRoute(t *testing.T) {
 
 func TestCurrentuserRoute(t *testing.T) {
 	t.Run("should return status 200", func(t *testing.T) {
-		ts := httptest.NewServer(server.SetupServer())
+		ts := httptest.NewServer(api.Instance())
 		defer ts.Close()
 
 		// Make a request to our server with the {base url}/ping
-		resp, err := http.Get(fmt.Sprintf("%s"+server.CurrentUserRoute, ts.URL))
+		resp, err := http.Get(fmt.Sprintf("%s"+api.CurrentUserRoute, ts.URL))
 
 		if err != nil {
 			t.Fatalf("Expected no error, got %v", err)

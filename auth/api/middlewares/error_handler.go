@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/geborskimateusz/auth/server/validation"
+	"github.com/geborskimateusz/auth/api/validation"
 	"github.com/gin-gonic/gin"
 )
 

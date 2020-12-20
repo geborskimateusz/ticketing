@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/geborskimateusz/auth/server"
-)
+import "github.com/geborskimateusz/auth/api"
 
 func main() {
-	server.Instance().Run()
+	api.Instance().Run()
 }

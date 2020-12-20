@@ -20,12 +20,14 @@ type UserDoc struct {
 	*User
 }
 
-func (userDoc *UserDoc) NewUserDoc(user User) *UserDoc {
-	userDoc.ID = primitive.NewObjectID()
-	userDoc.CreatedAt = time.Now()
-	userDoc.UpdatedAt = time.Now()
-	userDoc.Email = user.Email
-	userDoc.Password = user.Password
-
-	return userDoc
+func NewUserDoc(user User) *UserDoc {
+	return &UserDoc{
+		ID:        primitive.NewObjectID(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		User: &User{
+			Email:    user.Email,
+			Password: user.Password,
+		},
+	}
 }

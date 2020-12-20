@@ -8,10 +8,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/geborskimateusz/auth/server/entity"
+	"github.com/geborskimateusz/auth/api"
+	"github.com/geborskimateusz/auth/api/entity"
 
-	"github.com/geborskimateusz/auth/server"
-	"github.com/geborskimateusz/auth/server/controllers"
+	"github.com/geborskimateusz/auth/api/controllers"
 
 	gin "github.com/gin-gonic/gin"
 )
@@ -28,8 +28,8 @@ func TestSignup(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		c, r := gin.CreateTestContext(w)
-		r.POST(server.SignupRoute, controllers.Signup)
-		c.Request, _ = http.NewRequest("POST", server.SignupRoute, bytes.NewReader(userBytes))
+		r.POST(api.SignupRoute, controllers.Signup)
+		c.Request, _ = http.NewRequest("POST", api.SignupRoute, bytes.NewReader(userBytes))
 		r.ServeHTTP(w, c.Request)
 
 		if w.Code != http.StatusOK {
@@ -50,8 +50,8 @@ func TestSignup(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		c, r := gin.CreateTestContext(w)
-		r.POST(server.SignupRoute, controllers.Signup)
-		c.Request, _ = http.NewRequest("POST", server.SignupRoute, bytes.NewReader(userBytes))
+		r.POST(api.SignupRoute, controllers.Signup)
+		c.Request, _ = http.NewRequest("POST", api.SignupRoute, bytes.NewReader(userBytes))
 		r.ServeHTTP(w, c.Request)
 		fmt.Println("After")
 		if w.Code != http.StatusBadRequest {
