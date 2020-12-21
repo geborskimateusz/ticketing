@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"errors"
+	"log"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/api/db"
@@ -31,8 +31,10 @@ func Signup(c *gin.Context) {
 		return
 	}
 
+	log.Println(usersFound)
+
 	if len(usersFound) != 0 {
-		c.Error(errors.New("Email already in use"))
+		c.Error(validation.NewBadRequestError("Email already in use"))
 		return
 	}
 

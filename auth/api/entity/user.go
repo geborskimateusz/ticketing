@@ -12,20 +12,21 @@ type User struct {
 	Password string `json:"password" validate:"min=8,max=32,alphanum" bson:"password"`
 }
 
-// User is representation of model used to signin or signup
+// UserDoc is representation of model used to signin or signup
 type UserDoc struct {
-	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id"`
-	CreatedAt time.Time          `json:"createdAt,omitempty" bson:"created_at"`
-	UpdatedAt time.Time          `json:"updatedAt,omitempty" bson:"updated_at"`
-	*User
+	ID        primitive.ObjectID `bson:"_id"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
+	User      `bson:",inline"`
 }
 
-func NewUserDoc(user User) *UserDoc {
-	return &UserDoc{
+// NewUserDoc creates new User mongo document
+func NewUserDoc(user User) UserDoc {
+	return UserDoc{
 		ID:        primitive.NewObjectID(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		User: &User{
+		User: User{
 			Email:    user.Email,
 			Password: user.Password,
 		},

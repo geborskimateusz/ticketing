@@ -82,3 +82,17 @@ func NewNotFoundError() ApiError {
 	}
 	return *notFoundErr.ApiError
 }
+
+type BadRequestError struct {
+	*ApiError
+}
+
+func NewBadRequestError(message string) ApiError {
+	badRequestError := &BadRequestError{
+		&ApiError{
+			StatusCode: http.StatusBadRequest,
+			Reason:     message,
+		},
+	}
+	return *badRequestError.ApiError
+}

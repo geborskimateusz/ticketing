@@ -26,7 +26,7 @@ func Filter(field, value string) primitive.M {
 }
 
 // FindBy find User by given filter
-func FindBy(filter map[string]interface{}) ([]primitive.M, error) {
+func FindBy(filter primitive.M) ([]primitive.M, error) {
 	collection, err := GetCollection()
 	if err != nil {
 		return nil, err
