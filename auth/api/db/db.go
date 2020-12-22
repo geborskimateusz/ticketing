@@ -45,7 +45,7 @@ func FindBy(filter primitive.M) ([]primitive.M, error) {
 	return usersFiltered, nil
 }
 
-// Create creates User
+// Create UserDoc
 func Create(user entity.User) (*mongo.InsertOneResult, error) {
 	collection, err := GetCollection()
 	if err != nil {
