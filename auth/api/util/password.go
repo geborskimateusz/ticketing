@@ -6,7 +6,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func hashAndSalt(pwd []byte) string {
+func HashAndSalt(password string) string {
+
+	pwd := []byte(password)
 
 	// Use GenerateFromPassword to hash & salt pwd.
 	// MinCost is just an integer constant provided by the bcrypt
@@ -22,7 +24,7 @@ func hashAndSalt(pwd []byte) string {
 	return string(hash)
 }
 
-func comparePasswords(hashedPwd string, plainPwd []byte) bool {
+func ComparePasswords(hashedPwd string, plainPwd []byte) bool {
 	// Since we'll be getting the hashed password from the DB it
 	// will be a string so we'll need to convert it to a byte slice
 	byteHash := []byte(hashedPwd)

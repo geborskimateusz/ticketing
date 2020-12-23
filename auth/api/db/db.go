@@ -46,11 +46,17 @@ func FindBy(filter primitive.M) ([]primitive.M, error) {
 }
 
 // Create UserDoc
-func Create(user entity.User) (*mongo.InsertOneResult, error) {
+func Create(user entity.User) (*entity.User, error) {
 	collection, err := GetCollection()
 	if err != nil {
 		return nil, err
 	}
 
-	return collection.InsertOne(context.TODO(), entity.NewUserDoc(user))
+	userDoc := entity.NewUserDoc(user)
+	_, err = collection.InsertOne(context.TODO(), userDoc)
+	if err != nil {
+		return nil, err
+	}
+
+	return &entity.User{Email: userDoc.Email, Password: userDoc.Password}, nil
 }

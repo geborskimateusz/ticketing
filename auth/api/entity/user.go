@@ -3,6 +3,7 @@ package entity
 import (
 	"time"
 
+	"github.com/geborskimateusz/auth/api/util"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -28,7 +29,7 @@ func NewUserDoc(user User) UserDoc {
 		UpdatedAt: time.Now(),
 		User: User{
 			Email:    user.Email,
-			Password: user.Password,
+			Password: util.HashAndSalt(user.Password),
 		},
 	}
 }
