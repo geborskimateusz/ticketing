@@ -41,6 +41,13 @@ func Signup(c *gin.Context) {
 		return
 	}
 
+	// token, err := util.CreateToken(saved)
+	// if err != nil {
+	// 	c.JSON(http.StatusUnprocessableEntity, err.Error())
+	// 	return
+	// }
+	// log.Println("JWT %s", token)
+
 	c.JSON(http.StatusCreated, saved)
 
 }
