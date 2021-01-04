@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/geborskimateusz/auth/api/db"
 	"github.com/geborskimateusz/auth/api/entity"
+	"github.com/geborskimateusz/auth/api/util"
 	"github.com/geborskimateusz/auth/api/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -41,12 +43,12 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	// token, err := util.CreateToken(saved)
-	// if err != nil {
-	// 	c.JSON(http.StatusUnprocessableEntity, err.Error())
-	// 	return
-	// }
-	// log.Println("JWT %s", token)
+	token, err := util.CreateToken(saved.ID.String())
+	if err != nil {
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	log.Println("JWT %s", token)
 
 	c.JSON(http.StatusCreated, saved)
 

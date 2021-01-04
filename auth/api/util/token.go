@@ -17,7 +17,7 @@ type TokenDetails struct {
 	RtExpires    int64
 }
 
-func CreateToken(userid uint64) (*TokenDetails, error) {
+func CreateToken(userid string) (*TokenDetails, error) {
 	td := &TokenDetails{}
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
 	td.AccessUuid = uuid.NewV4().String()

@@ -46,7 +46,7 @@ func FindBy(filter primitive.M) ([]primitive.M, error) {
 }
 
 // Create UserDoc
-func Create(user entity.User) (*entity.User, error) {
+func Create(user entity.User) (*entity.UserDoc, error) {
 	collection, err := GetCollection()
 	if err != nil {
 		return nil, err
@@ -58,5 +58,5 @@ func Create(user entity.User) (*entity.User, error) {
 		return nil, err
 	}
 
-	return &entity.User{Email: userDoc.Email, Password: userDoc.Password}, nil
+	return &userDoc, nil
 }
