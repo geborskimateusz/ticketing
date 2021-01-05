@@ -17,7 +17,7 @@ type TokenDetails struct {
 	RtExpires    int64
 }
 
-func CreateToken(userid string) (*TokenDetails, error) {
+func CreateToken(userid, email string) (*TokenDetails, error) {
 	td := &TokenDetails{}
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
 	td.AccessUuid = uuid.NewV4().String()
@@ -43,6 +43,7 @@ func CreateToken(userid string) (*TokenDetails, error) {
 	rtClaims := jwt.MapClaims{}
 	rtClaims["refresh_uuid"] = td.RefreshUuid
 	rtClaims["user_id"] = userid
+	rtClaims["email"] = email
 	rtClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))

@@ -27,6 +27,7 @@ func Signup(c *gin.Context) {
 	}
 
 	usersFound, err := db.FindBy(db.Filter("email", user.Email))
+	log.Println(usersFound)
 	if err != nil {
 		c.Error(err)
 		return
@@ -43,12 +44,15 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	token, err := util.CreateToken(saved.ID.String())
+	token, err := util.CreateToken(saved.ID.String(), saved.Email)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	log.Println("JWT %s", token)
+	log.Println(token)
+	// session := sessions.Default(c)
+	// session.Set("jwt", token)
+	// session.Save()
 
 	c.JSON(http.StatusCreated, saved)
 
