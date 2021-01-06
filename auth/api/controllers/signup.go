@@ -8,6 +8,7 @@ import (
 	"github.com/geborskimateusz/auth/api/entity"
 	"github.com/geborskimateusz/auth/api/util"
 	"github.com/geborskimateusz/auth/api/validation"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -50,9 +51,9 @@ func Signup(c *gin.Context) {
 		return
 	}
 	log.Println(token)
-	// session := sessions.Default(c)
-	// session.Set("jwt", token)
-	// session.Save()
+	session := sessions.Default(c)
+	session.Set("jwt", token)
+	session.Save()
 
 	c.JSON(http.StatusCreated, saved)
 

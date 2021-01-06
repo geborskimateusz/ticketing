@@ -4,7 +4,8 @@ import (
 	"github.com/geborskimateusz/auth/api/controllers"
 	"github.com/geborskimateusz/auth/api/middlewares"
 	"github.com/geborskimateusz/auth/api/validation"
-
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +27,9 @@ const (
 func Instance() *gin.Engine {
 
 	router := gin.Default()
+	store := cookie.NewStore([]byte("secret"))
+
+	router.Use(sessions.Sessions("mysession", store))
 	router.Use(middlewares.ErrorHandler())
 
 	router.POST(SignupRoute, controllers.Signup)

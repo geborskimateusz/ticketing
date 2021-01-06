@@ -9,6 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/sessions v1.1.3
 	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/twinj/uuid v1.0.0
 	go.mongodb.org/mongo-driver v1.4.4
