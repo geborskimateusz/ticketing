@@ -1,16 +1,12 @@
 package controllers
 
 import (
-	"log"
-	"net/http"
-
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 func CurrentUser(c *gin.Context) {
-	session, _ := Store.Get(c.Request, "cookie-name")
-	v := session.Values["jwt"]
+	session := sessions.Default(c)
+	c.JSON(200, gin.H{"token": session.Get("jwt")})
 
-	log.Println(" ->>  ", v)
-	c.JSON(http.StatusOK, gin.H{"data": "Called /api/users/currentuser"})
 }
