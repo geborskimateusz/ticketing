@@ -1,14 +1,15 @@
 package controllers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/geborskimateusz/auth/api/db"
 	"github.com/geborskimateusz/auth/api/entity"
 	"github.com/geborskimateusz/auth/api/util"
 	"github.com/geborskimateusz/auth/api/validation"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -52,9 +53,18 @@ func Signup(c *gin.Context) {
 	}
 	log.Println(token)
 
-	session := sessions.Default(c)
-	session.Set("jwt", token)
-	session.Save()
+	// session := sessions.Default(c)
+	// session.Set("jwt", token)
+	// session.Save()
+
+	marshalled, err := json.Marshal(token)
+	if err != nil {
+		log.Println(err)
+	}
+
+	expire := time.Now().Add(20 * time.Minute) // Expires in 20 minutes
+	cookie := http.Cookie{Name: "jwt", Value: string(marshalled), Path: "/", Expires: expire, MaxAge: 86400, HttpOnly: true, Secure: true}
+	http.SetCookie(c.Writer, &cookie)
 
 	c.JSON(http.StatusCreated, saved)
 }
