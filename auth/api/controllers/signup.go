@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	b64 "encoding/base64"
+
 	"github.com/geborskimateusz/auth/api/db"
 	"github.com/geborskimateusz/auth/api/entity"
 	"github.com/geborskimateusz/auth/api/util"
@@ -57,7 +59,7 @@ func Signup(c *gin.Context) {
 	// session.Set("jwt", token)
 	// session.Save()
 
-	marshalled, err := json.Marshal(token)
+	marshalled, err := json.Marshal(b64.StdEncoding.EncodeToString([]byte(token.AccessToken)))
 	if err != nil {
 		log.Println(err)
 	}
