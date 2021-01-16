@@ -26,16 +26,13 @@ func CreateToken(userid, email string) (*TokenDetails, error) {
 	td.RefreshUuid = uuid.NewV4().String()
 
 	var err error
+
 	//Creating Access Token
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
 	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
-	atClaims["access_uuid"] = td.AccessUuid
-	atClaims["user_id"] = userid
 	atClaims["email"] = email
 	atClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	td.AccessToken, err = at.SignedString([]byte(os.Getenv("JWT_KEY")))
 	if err != nil {
 		return nil, err
 	}
