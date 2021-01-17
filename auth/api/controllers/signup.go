@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -53,20 +52,12 @@ func Signup(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	log.Println(token)
 
-	// session := sessions.Default(c)
-	// session.Set("jwt", token)
-	// session.Save()
-
-	marshalled, err := json.Marshal(b64.StdEncoding.EncodeToString([]byte(token.AccessToken)))
-	if err != nil {
-		log.Println(err)
-	}
+	encodedToken := b64.StdEncoding.EncodeToString([]byte(token.AccessToken))
 
 	expire := time.Now().Add(20 * time.Minute) // Expires in 20 minutes
-	cookie := http.Cookie{Name: "jwt", Value: string(marshalled), Path: "/", Expires: expire, MaxAge: 86400, HttpOnly: true, Secure: true}
+	cookie := http.Cookie{Name: "jwt", Value: encodedToken, Path: "/", Expires: expire, MaxAge: 86400, HttpOnly: true, Secure: true}
 	http.SetCookie(c.Writer, &cookie)
 
-	c.JSON(http.StatusCreated, saved)
+	c.JSON(http.StatusCreated, saved.AsJSON())
 }

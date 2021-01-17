@@ -33,3 +33,12 @@ func NewUserDoc(user User) UserDoc {
 		},
 	}
 }
+
+func (u *UserDoc) AsJSON() (ret struct {
+	ID    string
+	Email string
+}) {
+	ret.ID = u.ID.Hex()
+	ret.Email = u.Email
+	return
+}
