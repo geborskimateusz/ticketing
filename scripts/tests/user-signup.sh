@@ -1,8 +1,10 @@
 #!/bin/bash
 
 EMAIL=$(source ./random_email_generator.sh)
-echo "$EMAIL"
+PASSWORD="validPassword"
+echo "${EMAIL},${PASSWORD}" > test-credentials.txt
+
 curl -c ./cookie.txt --insecure --header "Content-Type: application/json" \
   --request POST \
-  --data '{"email":"'"$EMAIL"'","password":"validPassword"}' \
+  --data '{"email":"'"$EMAIL"'","password":"'"$PASSWORD"'"}' \
  https://ticketing.dev/api/users/signup | jq '.'
