@@ -26,14 +26,10 @@ func Instance() *gin.Engine {
 
 	router := gin.Default()
 
-	// store := cookie.NewStore([]byte("secret"))
-	// store.Options(sessions.Options{Secure: true})
-
-	// router.Use(sessions.Sessions("mysession", store))
 	router.Use(middlewares.ErrorHandler())
 
-	router.POST(SignupRoute, controllers.Signup)
-	router.POST(SigninRoute, controllers.Signin)
+	router.POST(SignupRoute, middlewares.ValidateRequest(), controllers.Signup)
+	router.POST(SigninRoute, middlewares.ValidateRequest(), controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
 	router.GET(CurrentUserRoute, controllers.CurrentUser)
 
