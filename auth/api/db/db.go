@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"log"
 
 	"github.com/geborskimateusz/auth/api/entity"
 	"github.com/geborskimateusz/auth/api/validation"
@@ -26,23 +25,19 @@ func Filter(field, value string) primitive.M {
 }
 
 // FindBy find User by given filter
-func FindBy(filter primitive.M) ([]primitive.M, error) {
+func FindBy(filter primitive.M) (entity.UserDoc, error) {
 	collection, err := GetCollection()
 	if err != nil {
-		return nil, err
-	}
-	filterCursor, err := collection.Find(context.TODO(), filter)
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-	var usersFiltered []bson.M
-	if err = filterCursor.All(context.TODO(), &usersFiltered); err != nil {
-		log.Fatal(err)
-		return nil, err
+		return entity.UserDoc{}, err
 	}
 
-	return usersFiltered, nil
+	var result entity.UserDoc
+	err = collection.FindOne(context.TODO(), filter).Decode(&result)
+	if err != nil {
+		return entity.UserDoc{}, nil
+	}
+
+	return result, nil
 }
 
 // Create UserDoc

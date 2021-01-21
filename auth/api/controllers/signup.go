@@ -1,11 +1,7 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
-	"time"
-
-	b64 "encoding/base64"
 
 	"github.com/geborskimateusz/auth/api/db"
 	"github.com/geborskimateusz/auth/api/entity"
@@ -20,14 +16,13 @@ func Signup(c *gin.Context) {
 	var user entity.User
 	c.ShouldBindBodyWith(&user, binding.JSON)
 
-	usersFound, err := db.FindBy(db.Filter("email", user.Email))
-	log.Println(usersFound)
+	userFound, err := db.FindBy(db.Filter("email", user.Email))
 	if err != nil {
 		c.Error(err)
 		return
 	}
 
-	if len(usersFound) != 0 {
+	if userFound != (entity.UserDoc{}) {
 		c.Error(validation.NewBadRequestError("Email already in use"))
 		return
 	}
@@ -38,17 +33,13 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	token, err := util.CreateToken(saved.ID.String(), saved.Email)
+	encodedToken, err := util.GenerateJWTtoken(saved.ID.String(), saved.Email)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	encodedToken := b64.StdEncoding.EncodeToString([]byte(token.AccessToken))
-
-	expire := time.Now().Add(20 * time.Minute) // Expires in 20 minutes
-	cookie := http.Cookie{Name: "jwt", Value: encodedToken, Path: "/", Expires: expire, MaxAge: 86400, HttpOnly: true, Secure: true}
-	http.SetCookie(c.Writer, &cookie)
+	util.SetCookie(c, "jwt", encodedToken)
 
 	c.JSON(http.StatusCreated, saved.AsJSON())
 }

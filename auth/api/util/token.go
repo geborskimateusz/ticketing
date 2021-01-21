@@ -1,6 +1,7 @@
 package util
 
 import (
+	b64 "encoding/base64"
 	"os"
 	"time"
 
@@ -38,4 +39,15 @@ func CreateToken(userid, email string) (*TokenDetails, error) {
 	}
 
 	return td, nil
+}
+
+func GenerateJWTtoken(id, email string) (string, error) {
+	token, err := CreateToken(id, email)
+	if err != nil {
+		return "", err
+	}
+
+	encodedToken := b64.StdEncoding.EncodeToString([]byte(token.AccessToken))
+
+	return encodedToken, nil
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-EMAIL="johndoe"
-PASSWORD="invalid"
+EMAIL="VsDb3ZLlwJ@mail.xy"
+PASSWORD="in12212valid"
 
 curl -c ./cookie.txt --insecure --header "Content-Type: application/json" \
   --request POST \
