@@ -1,12 +1,20 @@
 package controllers
 
 import (
-	"github.com/gin-contrib/sessions"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 func CurrentUser(c *gin.Context) {
-	session := sessions.Default(c)
-	c.JSON(200, gin.H{"token": session.Get("jwt")})
+	cookie, err := c.Request.Cookie("jwt")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{currentUser: nil})
+		return
+	}
+
+	//verify token here https://godoc.org/github.com/dgrijalva/jwt-go#example-Parse--Hmac
+
+	c.JSON(200, cookie)
 
 }
