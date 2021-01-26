@@ -33,13 +33,13 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	encodedToken, err := util.GenerateJWTtoken(saved.ID.String(), saved.Email)
+	jwtToken, err := util.CreateToken(saved.ID.Hex(), saved.Email)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
-	util.SetCookie(c, "jwt", encodedToken)
+	util.SetCookie(c, "jwt", jwtToken)
 
 	c.JSON(http.StatusCreated, saved.AsJSON())
 }
