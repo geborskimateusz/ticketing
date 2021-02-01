@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/dgrijalva/jwt-go"
@@ -18,11 +17,11 @@ func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Request.Cookie("jwt")
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"currentUser": nil})
+			c.Next()
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(
+		token, _ := jwt.ParseWithClaims(
 			cookie.Value,
 			&util.CustomClaims{},
 			func(token *jwt.Token) (interface{}, error) {
@@ -30,11 +29,9 @@ func CurrentUser() gin.HandlerFunc {
 			},
 		)
 
-		claims, ok := token.Claims.(*util.CustomClaims)
-		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"currentUser": nil})
-			return
-		}
+		claims, _ := token.Claims.(*util.CustomClaims)
+
+		c.Set("currentUser", &UserPayload{ID: claims.ID, Email: claims.Email})
 
 		c.Next()
 	}

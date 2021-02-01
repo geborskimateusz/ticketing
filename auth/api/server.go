@@ -31,7 +31,7 @@ func Instance() *gin.Engine {
 	router.POST(SignupRoute, middlewares.ValidateRequest(), controllers.Signup)
 	router.POST(SigninRoute, middlewares.ValidateRequest(), controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
-	router.GET(CurrentUserRoute, controllers.CurrentUser)
+	router.GET(CurrentUserRoute, middlewares.CurrentUser(), controllers.CurrentUser)
 
 	router.NoRoute(func(c *gin.Context) {
 		c.Error(validation.NewNotFoundError())
