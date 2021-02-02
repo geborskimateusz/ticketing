@@ -4,14 +4,10 @@ import (
 	"os"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/geborskimateusz/auth/api/entity"
 	"github.com/geborskimateusz/auth/api/util"
 	"github.com/gin-gonic/gin"
 )
-
-type UserPayload struct {
-	ID    string `json:"id"`
-	Email string `json:"email"`
-}
 
 func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -31,7 +27,7 @@ func CurrentUser() gin.HandlerFunc {
 
 		claims, _ := token.Claims.(*util.CustomClaims)
 
-		c.Set("currentUser", &UserPayload{ID: claims.ID, Email: claims.Email})
+		c.Set("currentUser", &entity.UserPayload{ID: claims.ID, Email: claims.Email})
 
 		c.Next()
 	}

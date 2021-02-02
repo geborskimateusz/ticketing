@@ -96,3 +96,17 @@ func NewBadRequestError(message string) ApiError {
 	}
 	return *badRequestError.ApiError
 }
+
+type NotAuthorizedError struct {
+	*ApiError
+}
+
+func NewNotAuthorizedError() ApiError {
+	notAuthorizedErr := &NotAuthorizedError{
+		&ApiError{
+			StatusCode: http.StatusUnauthorized,
+			Reason:     "Not Authorized",
+		},
+	}
+	return *notAuthorizedErr.ApiError
+}
