@@ -1,4 +1,4 @@
-package controllers
+package test
 
 import (
 	"bytes"
@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/geborskimateusz/auth/api"
-	"github.com/geborskimateusz/auth/test/assertions"
 )
 
 func TestSignupRoute(t *testing.T) {
@@ -28,7 +27,7 @@ func TestSignupRoute(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	assertions.AssertStatusCode(http.StatusOK, resp.StatusCode)
+	AssertStatusCode(http.StatusOK, resp.StatusCode)
 
 	val, ok := resp.Header["Content-Type"]
 
