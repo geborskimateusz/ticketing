@@ -1,7 +1,6 @@
 package test
 
 import (
-	"context"
 	"log"
 	"os"
 	"sync"
@@ -9,9 +8,7 @@ import (
 
 	"github.com/benweissmann/memongo"
 	"github.com/geborskimateusz/auth/api/db"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 /* Used to create a singleton object of MongoDB client.
@@ -34,37 +31,9 @@ func TestMain(m *testing.M) {
 	}
 	defer mongoServer.Stop()
 
+	db.CONNECTIONSTRING = mongoServer.URI()
 	tests := m.Run()
 
 	os.Exit(tests)
 }
 
-func GetMongoTestClient() (*mongo.Client, error) {
-	//Perform connection creation operation only once.
-	//Creates Singleton
-	mongoOnce.Do(func() {
-		// Set client options
-		clientOptions := options.Client().ApplyURI(mongoServer.URI())
-		// Connect to MongoDB
-		client, err := mongo.Connect(context.TODO(), clientOptions)
-		if err != nil {
-			clientInstanceError = err
-		}
-		// Check the connection
-		err = client.Ping(context.TODO(), nil)
-		if err != nil {
-			clientInstanceError = err
-		}
-		clientInstance = client
-	})
-	return clientInstance, clientInstanceError
-}
-
-func CleanupCollection() {
-	collection, err := db.GetCollection()
-	if err != nil {
-		log.Println(err)
-	}
-
-	collection.DeleteMany(context.TODO(), bson.M{})
-}

@@ -27,7 +27,7 @@ func TestSignupRoute(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	AssertStatusCode(http.StatusOK, resp.StatusCode)
+	AssertStatusCode(http.StatusCreated, resp.StatusCode)
 
 	val, ok := resp.Header["Content-Type"]
 

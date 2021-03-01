@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"sync"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -18,15 +19,15 @@ var clientInstanceError error
 //Used to execute client creation procedure only once.
 var mongoOnce sync.Once
 
-//I have used below constants just to hold required database config's.
+var CONNECTIONSTRING = "mongodb://auth-mongo-srv:27017/auth"
 const (
-	CONNECTIONSTRING = "mongodb://auth-mongo-srv:27017/auth"
 	DBNAME           = "db_user"
 	USERS            = "col_users"
 )
 
 //GetMongoClient - Return mongodb connection to work with
 func GetMongoClient() (*mongo.Client, error) {
+	fmt.Printf("Obtaining connection on %v", CONNECTIONSTRING)
 	//Perform connection creation operation only once.
 	//Creates Singleton
 	mongoOnce.Do(func() {
