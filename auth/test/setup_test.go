@@ -25,15 +25,15 @@ var mongoServer memongo.Server
 
 // TestMain can control flow of startup and cleanup
 func TestMain(m *testing.M) {
+	os.Setenv("JWT_KEY", "any")
+
 	mongoServer, err := memongo.Start("4.0.5")
 	if err != nil {
 		log.Fatal(err)
 	}
+	db.CONNECTIONSTRING = mongoServer.URI()
 	defer mongoServer.Stop()
 
-	db.CONNECTIONSTRING = mongoServer.URI()
 	tests := m.Run()
-
 	os.Exit(tests)
 }
-

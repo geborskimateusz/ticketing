@@ -11,33 +11,47 @@ import (
 	"github.com/geborskimateusz/auth/api"
 )
 
+func SingnupRequest(httpServer *httptest.Server, jsonBody []byte) (*http.Response, error) {
+	requestBody := bytes.NewBuffer(jsonBody)
+	return http.Post(fmt.Sprintf("%s/api/users/signup", httpServer.URL), "application/json", requestBody)
+}
 func TestSignupRoute(t *testing.T) {
 	ts := httptest.NewServer(api.Instance())
 	defer ts.Close()
 
-	user, _ := json.Marshal(map[string]string{
-		"email":    "test@example.com",
-		"password": "123123asdsf",
+	t.Run("Expect status 201 on succesful signup", func(t *testing.T) {
+
+		user, _ := json.Marshal(map[string]string{
+			"email":    "test@example.com",
+			"password": "123123asdsf",
+		})
+
+		resp, err := SingnupRequest(ts, user)
+
+		AssertAnyError(t, err)
+		AssertStatusCode(t, http.StatusCreated, resp.StatusCode)
 	})
-	responseBody := bytes.NewBuffer(user)
 
-	resp, err := http.Post(fmt.Sprintf("%s/api/users/signup", ts.URL), "application/json", responseBody)
+	t.Run("Expect status 400 on invalid body", func(t *testing.T) {
 
-	if err != nil {
-		t.Fatalf("Expected no error, got %v", err)
-	}
+		// invalid email
+		user, _ := json.Marshal(map[string]string{
+			"email":    "testxample.com",
+			"password": "123123asdsf",
+		})
+		resp, err := SingnupRequest(ts, user)
+		AssertAnyError(t, err)
+		AssertStatusCode(t, http.StatusBadRequest, resp.StatusCode)
 
-	AssertStatusCode(http.StatusCreated, resp.StatusCode)
+		// invalid password
+		user, _ = json.Marshal(map[string]string{
+			"email":    "test@xample.com",
+			"password": "1",
+		})
 
-	val, ok := resp.Header["Content-Type"]
+		resp, err = SingnupRequest(ts, user)
 
-	// Assert that the "content-type" header is actually set
-	if !ok {
-		t.Fatalf("Expected Content-Type header to be set")
-	}
-
-	// Assert that it was set as expected
-	if val[0] != "application/json; charset=utf-8" {
-		t.Fatalf("Expected \"application/json; charset=utf-8\", got %s", val[0])
-	}
+		AssertAnyError(t, err)
+		AssertStatusCode(t, http.StatusBadRequest, resp.StatusCode)
+	})
 }
