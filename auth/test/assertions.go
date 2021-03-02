@@ -1,6 +1,7 @@
 package test
 
 import (
+	"io"
 	"log"
 	"testing"
 )
@@ -17,4 +18,9 @@ func AssertAnyError(t *testing.T, err error) {
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
+}
+
+func AssertResponseBody(t *testing.T, expected string, actual io.ReadCloser) {
+	t.Helper()
+	t.Fail()
 }
