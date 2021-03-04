@@ -62,7 +62,7 @@ func TestSignupRoute(t *testing.T) {
 
 		duplicate, _ := SingnupRequest(ts, user)
 		AssertStatusCode(t, http.StatusBadRequest, duplicate.StatusCode)
-		AssertResponseBody(t, "Email already in use", duplicate.Body)
+		AssertResponseBody(t, `{"errors":["Email already in use"]}`, duplicate)
 	})
 
 }
