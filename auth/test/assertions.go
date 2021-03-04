@@ -35,3 +35,12 @@ func AssertResponseBody(t *testing.T, expected string, actual *http.Response) {
 	}
 
 }
+
+func AssertHeaderExist(t *testing.T, header string, response *http.Response) {
+	t.Helper()
+
+	actual := response.Header.Get(header)
+	if actual == "" {
+		t.Fatalf("Expected %v", header)
+	}
+}

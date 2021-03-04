@@ -65,4 +65,17 @@ func TestSignupRoute(t *testing.T) {
 		AssertResponseBody(t, `{"errors":["Email already in use"]}`, duplicate)
 	})
 
+	t.Run("Sets a cookie after successful signup", func(t *testing.T) {
+
+		user, _ := json.Marshal(map[string]string{
+			"email":    "test4@example.com",
+			"password": "123123asdsf",
+		})
+
+		response, _ := SingnupRequest(ts, user)
+		AssertStatusCode(t, http.StatusCreated, response.StatusCode)
+		AssertHeaderExist(t, "Set-Cookie", response)
+
+	})
+
 }
