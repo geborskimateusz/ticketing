@@ -44,3 +44,10 @@ func AssertHeaderExist(t *testing.T, header string, response *http.Response) {
 		t.Fatalf("Expected %v", header)
 	}
 }
+
+func AssertEquals(t *testing.T, expected, actual string) {
+	t.Helper()
+	if actual != expected {
+		log.Fatalf("Expected status code %v, got %v", expected, actual)
+	}
+}
