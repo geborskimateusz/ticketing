@@ -12,14 +12,13 @@ import (
 
 func CurrentUserRequest(httpServer *httptest.Server, cookie string) (*http.Response, error) {
 	req, err := http.Get(fmt.Sprintf("%s/api/users/currentuser", httpServer.URL))
-	req.Header.Set("currentUser", cookie)
 	return req, err
 }
 func TestCurrentUserRoute(t *testing.T) {
 	ts := httptest.NewServer(api.Instance())
 	defer ts.Close()
 
-	t.Run("Should return current user metadata", func(t *testing.T) {
+	t.Run("Should return null when not logged", func(t *testing.T) {
 
 		user, _ := json.Marshal(map[string]string{
 			"email":    "anyuser@example.com",
@@ -29,8 +28,8 @@ func TestCurrentUserRoute(t *testing.T) {
 		signupRes, _ := SingnupRequest(ts, user)
 		cookie := signupRes.Header.Get("Set-Cookie")
 
-		resp, _ := CurrentUserRequest(ts, cookie)
-		// AssertStatusCode(t, http.StatusOK, resp.StatusCode)
-		// AssertHeaderExist(t, "Set-Cookie", resp)
+		response, _ := CurrentUserRequest(ts, cookie)
+		AssertStatusCode(t, http.StatusUnauthorized, response.StatusCode)
+		AssertResponseBody(t, `{"currentUser":null}`, response)
 	})
 }
