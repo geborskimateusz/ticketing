@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/geborskimateusz/auth/api/util"
+	util "github.com/geborskimateusz/auth/api/util"
 	"github.com/gin-gonic/gin"
 )
 

@@ -4,16 +4,11 @@ import (
 	"os"
 
 	"github.com/dgrijalva/jwt-go"
+	common "github.com/geborskimateusz/ticketing-common"
 )
 
-type CustomClaims struct {
-	Email string `json:"email"`
-	ID    string `json:"id"`
-	jwt.StandardClaims
-}
-
 func CreateToken(userid, email string) (string, error) {
-	claims := CustomClaims{
+	claims := common.CustomClaims{
 		Email: email,
 		ID:    userid,
 		StandardClaims: jwt.StandardClaims{

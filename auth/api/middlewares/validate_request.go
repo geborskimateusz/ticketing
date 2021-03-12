@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	"github.com/geborskimateusz/auth/api/entity"
-	"github.com/geborskimateusz/auth/api/validation"
+	common "github.com/geborskimateusz/ticketing-common"
+	entity "github.com/geborskimateusz/auth/api/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
@@ -15,7 +15,7 @@ func ValidateRequest() gin.HandlerFunc {
 			validate := validator.New()
 			if err := validate.Struct(&user); err != nil {
 				validationErrors := err.(validator.ValidationErrors)
-				c.Error(validation.NewRequestValidationError(validationErrors))
+				c.Error(common.NewRequestValidationError(validationErrors))
 				c.Abort()
 				return
 			}

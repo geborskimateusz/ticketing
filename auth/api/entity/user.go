@@ -3,15 +3,11 @@ package entity
 import (
 	"time"
 
-	"github.com/geborskimateusz/auth/api/util"
+	util "github.com/geborskimateusz/auth/api/util"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// UserPayload is metadata about current user in session
-type UserPayload struct {
-	ID    string `json:"id"`
-	Email string `json:"email"`
-}
+
 
 // User is representation of model used to signin or signup
 type User struct {

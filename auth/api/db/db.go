@@ -3,8 +3,8 @@ package db
 import (
 	"context"
 
-	"github.com/geborskimateusz/auth/api/entity"
-	"github.com/geborskimateusz/auth/api/validation"
+	entity "github.com/geborskimateusz/auth/api/entity"
+	common "github.com/geborskimateusz/ticketing-common"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,7 +14,7 @@ import (
 func GetCollection() (*mongo.Collection, error) {
 	client, err := GetMongoClient()
 	if err != nil {
-		return nil, validation.NewDataBaseConnectionError(err)
+		return nil, common.NewDataBaseConnectionError(err)
 	}
 	return client.Database(DBNAME).Collection(USERS), nil
 }

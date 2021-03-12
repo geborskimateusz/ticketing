@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/geborskimateusz/auth/api/controllers"
-	"github.com/geborskimateusz/auth/api/middlewares"
-	"github.com/geborskimateusz/auth/api/validation"
+	controllers "github.com/geborskimateusz/auth/api/controllers"
+	middlewares "github.com/geborskimateusz/auth/api/middlewares"
+	common "github.com/geborskimateusz/ticketing-common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,15 +26,15 @@ func Instance() *gin.Engine {
 
 	router := gin.Default()
 
-	router.Use(middlewares.ErrorHandler())
+	router.Use(common.ErrorHandler())
 
 	router.POST(SignupRoute, middlewares.ValidateRequest(), controllers.Signup)
 	router.POST(SigninRoute, middlewares.ValidateRequest(), controllers.Signin)
 	router.POST(SignoutRoute, controllers.Signout)
-	router.GET(CurrentUserRoute, middlewares.CurrentUser(), controllers.CurrentUser)
+	router.GET(CurrentUserRoute, common.CurrentUser(), controllers.CurrentUser)
 
 	router.NoRoute(func(c *gin.Context) {
-		c.Error(validation.NewNotFoundError())
+		c.Error(common.NewNotFoundError())
 	})
 
 	return router

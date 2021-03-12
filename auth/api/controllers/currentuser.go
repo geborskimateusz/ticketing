@@ -3,12 +3,12 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/geborskimateusz/auth/api/entity"
+	common "github.com/geborskimateusz/ticketing-common"
 	"github.com/gin-gonic/gin"
 )
 
 func CurrentUser(c *gin.Context) {
-	currentUser, ok := c.Keys["currentUser"].(*entity.UserPayload)
+	currentUser, ok := c.Keys["currentUser"].(*common.UserPayload)
 	if !ok {
 		c.JSON(http.StatusUnauthorized, gin.H{"currentUser": nil})
 		return

@@ -3,10 +3,10 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/geborskimateusz/auth/api/db"
-	"github.com/geborskimateusz/auth/api/entity"
-	"github.com/geborskimateusz/auth/api/util"
-	"github.com/geborskimateusz/auth/api/validation"
+	db "github.com/geborskimateusz/auth/api/db"
+	entity "github.com/geborskimateusz/auth/api/entity"
+	util "github.com/geborskimateusz/auth/api/util"
+	common "github.com/geborskimateusz/ticketing-common"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
@@ -23,7 +23,7 @@ func Signup(c *gin.Context) {
 	}
 
 	if userFound != (entity.UserDoc{}) {
-		c.Error(validation.NewBadRequestError("Email already in use"))
+		c.Error(common.NewBadRequestError("Email already in use"))
 		return
 	}
 
